@@ -1,4 +1,5 @@
 // http://stackoverflow.com/questions/10343913/how-to-create-a-web-worker-from-a-string
+var PseudoWorker = require('pseudo-worker');
 
 var URL = window.URL || window.webkitURL;
 module.exports = function(content, url) {
@@ -13,14 +14,14 @@ module.exports = function(content, url) {
       } catch(e) { // The proposed API
         blob = new Blob([content]);
       }
-      return new Worker(URL.createObjectURL(blob));
+      return new PseudoWorker(URL.createObjectURL(blob));
     } catch(e) {
-      return new Worker('data:application/javascript,' + encodeURIComponent(content));
+      return new PseudoWorker('data:application/javascript,' + encodeURIComponent(content));
     }
   } catch(e) {
     if (!url) {
       throw Error('Inline worker is not supported');
     }
-    return new Worker(url);
+    return new PseudoWorker(url);
   }
 }
